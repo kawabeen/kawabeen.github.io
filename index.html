@@ -3,14 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>テストサイト</title>
+
+  <title>三浦海岸マップ</title>
+
+  <!-- MapLibreのCSS -->
+  <link
+    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
+    rel="stylesheet"
+  >
+
+  <!-- MapLibre本体 -->
+  <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h1>テストサイト</h1>
+<div id="map"></div>
 
-  <p>地域情報・災害情報をお伝えします。</p>
+<script>
+
+  // 三浦海岸駅の位置
+  const miurakaigan = [139.6534, 35.1883];
+
+  // 地図を作成
+  const map = new maplibregl.Map({
+    container: 'map',
+
+    style: {
+      version: 8,
+
+      sources: {
+        osm: {
+          type: 'raster',
+
+          tiles: [
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+          ],
+
+          tileSize: 256,
+
+          attribution:
+            '&copy; OpenStreetMap contributors'
+        }
+      },
+
+      layers: [
+        {
+          id: 'osm',
+          type: 'raster',
+          source: 'osm'
+        }
+      ]
+    },
+
+    // 地図の中心
+    center: miurakaigan,
+
+    // 拡大率
+    zoom: 15
+  });
+
+
+  // 三浦海岸駅にマーカーを置く
+  new maplibregl.Marker()
+    .setLngLat(miurakaigan)
+    .setPopup(
+      new maplibregl.Popup()
+        .setHTML('<b>三浦海岸駅</b>')
+    )
+    .addTo(map);
+
+</script>
 
 </body>
 </html>
